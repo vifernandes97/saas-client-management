@@ -1,0 +1,25 @@
+version: '3'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: client_management
+    volumes:
+      - ./db:/var/lib/mysql
