@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   frontend:
     build: ./frontend
@@ -13,6 +13,13 @@ services:
       - "8001:8001"
     depends_on:
       - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=yourpassword
+      - DB_NAME=client_management
+    restart: always
 
   db:
     image: mysql:latest
@@ -23,3 +30,9 @@ services:
       MYSQL_DATABASE: client_management
     volumes:
       - ./db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always

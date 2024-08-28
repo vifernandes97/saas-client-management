@@ -21,37 +21,24 @@ Client.init({
     type: DataTypes.DATE,
     allowNull: false,
   },
-  dataChurn: {
-    type: DataTypes.DATE,
-    allowNull: true,
-  },
-  lifetime: {
-    type: DataTypes.INTEGER,  // Em meses, por exemplo
-    allowNull: true,
-  },
-  ltv: {
-    type: DataTypes.FLOAT,  // Lifetime Value em valor monetário
-    allowNull: true,
-  },
   nomeGestor: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   estrutura: {
-    type: DataTypes.JSON,  // Armazenar como JSON
-    allowNull: true,
-  },
-  contatosInternos: {
-    type: DataTypes.JSON,  // Armazenar uma lista de contatos como JSON
-    allowNull: true,
-  },
-  valorRecorrencia: {
-    type: DataTypes.FLOAT,  // Valor monetário
+    type: DataTypes.ENUM('gestor sozinho', 'gestor + rd', 'gestor + rd + vend', 'equipe completa'),
     allowNull: false,
   },
-  motivoChurn: {
-    type: DataTypes.STRING,
+  contatosInternos: {
+    type: DataTypes.JSON,
     allowNull: true,
+    validate: {
+      notNull: false,
+    }
+  },
+  valorRecorrencia: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
   },
   cidadeBuffet: {
     type: DataTypes.STRING,
@@ -68,6 +55,19 @@ Client.init({
 }, {
   sequelize,
   modelName: 'Client',
+  hooks: {
+    beforeValidate: (client) => {
+      // Sanitizar contatosInternos para garantir que valores vazios sejam tratados
+      if (client.contatosInternos && Array.isArray(client.contatosInternos)) {
+        client.contatosInternos = client.contatosInternos.map(contact => ({
+          nome: contact.nome || null,
+          cargo: contact.cargo || null,
+          email: contact.email || null,
+          telefone: contact.telefone || null,
+        }));
+      }
+    }
+  }
 });
 
 module.exports = Client;
