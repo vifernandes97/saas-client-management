@@ -42,5 +42,40 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Rota para obter os detalhes de um cliente pelo ID
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const client = await Client.findByPk(id); // Busca o cliente pelo ID
+    if (client) {
+      res.status(200).json(client);
+    } else {
+      res.status(404).json({ message: 'Cliente não encontrado.' });
+    }
+  } catch (error) {
+    console.error('Erro ao buscar cliente:', error);
+    res.status(500).json({ message: 'Erro ao buscar cliente.' });
+  }
+});
+
+// Rota para excluir um cliente pelo ID
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const client = await Client.findByPk(id);
+    if (client) {
+      await client.destroy();
+      res.status(200).json({ message: 'Cliente excluído com sucesso.' });
+    } else {
+      res.status(404).json({ message: 'Cliente não encontrado.' });
+    }
+  } catch (error) {
+    console.error('Erro ao excluir cliente:', error);
+    res.status(500).json({ message: 'Erro ao excluir cliente.' });
+  }
+});
+
 
 module.exports = router;
