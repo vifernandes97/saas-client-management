@@ -4,13 +4,14 @@ const clientRoutes = require('./routes/clientRoutes');
 const sequelize = require('./config/database');
 
 // Sincronizar o modelo com o banco de dados
-sequelize.sync()
+sequelize.sync({ alter: true })
   .then(() => {
-    console.log('Database & tables created!');
+    console.log('Database synchronized with the model');
   })
-  .catch((error) => {
-    console.error('Error connecting to the database:', error);
+  .catch(error => {
+    console.error('Error synchronizing the database:', error);
   });
+
 
 const app = express();
 app.use(cors());

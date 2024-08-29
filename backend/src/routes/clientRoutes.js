@@ -34,13 +34,17 @@ router.post('/', async (req, res) => {
 // Rota para listar todos os clientes
 router.get('/', async (req, res) => {
   try {
-    const clients = await Client.findAll(); // Busca todos os clientes no banco de dados
-    res.status(200).json(clients || []); // Retorna os clientes como JSON, garante um array vazio se não houver clientes
+    console.log("Fetching clients...");
+    const clients = await Client.findAll();
+    console.log("Clients fetched:", clients);
+    res.status(200).json(clients || []);
   } catch (error) {
     console.error('Error fetching clients:', error);
     res.status(500).json({ error: 'An error occurred while fetching clients.' });
   }
 });
+
+
 
 // Rota para obter os detalhes de um cliente pelo ID
 router.get('/:id', async (req, res) => {

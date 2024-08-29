@@ -32,9 +32,6 @@ Client.init({
   contatosInternos: {
     type: DataTypes.JSON,
     allowNull: true,
-    validate: {
-      notNull: false,
-    }
   },
   valorRecorrencia: {
     type: DataTypes.FLOAT,
@@ -48,26 +45,73 @@ Client.init({
     type: DataTypes.ENUM('light', 'pro'),
     allowNull: false,
   },
-  churned: {
+  fonte: {
+    type: DataTypes.ENUM('Facebook', 'Instagram', 'Google', 'Indicação', 'Reativação', 'Busca Direta', 'Conteúdo Blog', 'Material'),
+    allowNull: true,
+  },
+  vendedor: {
+    type: DataTypes.ENUM('Caê Castelli', 'Vinicius Fernandes', 'Marcella Drummond'),
+    allowNull: true,
+  },
+  contratos: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  chs: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  leads: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  pacotes: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    allowNull: true,
+  },
+  integracaoInstagram: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+  },
+  instanciaWhatsapp: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+  },
+  landingPage: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  emailLogin: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lifetime: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  ri: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.ENUM('Onboarding', 'Acompanhamento', 'Churn'),
+    allowNull: true,
+  },
+  churn: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+  },
+  dataChurn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+  ltv: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
   },
 }, {
   sequelize,
   modelName: 'Client',
-  hooks: {
-    beforeValidate: (client) => {
-      // Sanitizar contatosInternos para garantir que valores vazios sejam tratados
-      if (client.contatosInternos && Array.isArray(client.contatosInternos)) {
-        client.contatosInternos = client.contatosInternos.map(contact => ({
-          nome: contact.nome || null,
-          cargo: contact.cargo || null,
-          email: contact.email || null,
-          telefone: contact.telefone || null,
-        }));
-      }
-    }
-  }
 });
 
 module.exports = Client;
