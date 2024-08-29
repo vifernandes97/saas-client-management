@@ -6,6 +6,8 @@ services:
       - "3001:3001"
     depends_on:
       - backend
+    networks:
+      - mynetwork
 
   backend:
     build: ./backend
@@ -19,6 +21,12 @@ services:
       - DB_USER=root
       - DB_PASS=yourpassword
       - DB_NAME=client_management
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mynetwork
     restart: always
 
   db:
@@ -35,4 +43,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - mynetwork
     restart: always
+
+networks:
+  mynetwork:
+    driver: bridge

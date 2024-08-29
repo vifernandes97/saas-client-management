@@ -24,12 +24,6 @@ app.get('/', (req, res) => {
 // Rotas para clientes
 app.use('/clients', clientRoutes);
 
-// Manipulação de erros
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 // Iniciar o servidor
 const PORT = process.env.PORT || 8001;
 app.listen(PORT, () => {

@@ -2,11 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Client = require('../models/client');
 
-// Rota de exemplo
-router.get('/', (req, res) => {
-    res.send('Client Routes Working!');
-});
-
 // Rota para criar um novo cliente
 router.post('/', async (req, res) => {
   const {
@@ -36,15 +31,16 @@ router.post('/', async (req, res) => {
 });
 
 
-  router.get('/', async (req, res) => {
-    try {
-      const clients = await Client.findAll();
-      res.json(clients);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  
-  
+// Rota para listar todos os clientes
+router.get('/', async (req, res) => {
+  try {
+    const clients = await Client.findAll(); // Busca todos os clientes no banco de dados
+    res.status(200).json(clients || []); // Retorna os clientes como JSON, garante um array vazio se não houver clientes
+  } catch (error) {
+    console.error('Error fetching clients:', error);
+    res.status(500).json({ error: 'An error occurred while fetching clients.' });
+  }
+});
+
 
 module.exports = router;
