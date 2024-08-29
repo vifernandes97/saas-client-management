@@ -81,6 +81,23 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Rota para obter o total de clientes e o valor total das recorrências
+router.get('/dashboard/summary', async (req, res) => {
+  try {
+    const totalClientes = await Client.count();
+    const totalRecorrencias = await Client.sum('valorRecorrencia');
+
+    res.status(200).json({
+      totalClientes,
+      totalRecorrencias,
+    });
+  } catch (error) {
+    console.error('Erro ao buscar dados do dashboard:', error);
+    res.status(500).json({ error: 'Erro ao buscar dados do dashboard.' });
+  }
+});
+
+
 // Atualizar um cliente existente
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
